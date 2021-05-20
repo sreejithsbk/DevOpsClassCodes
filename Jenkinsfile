@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+def gv
 pipeline {
     agent any
     tools{
@@ -7,31 +8,32 @@ pipeline {
         maven 'mymaven'
     }
     stages {
-        stage('build war file') {
+        stage("init"){
+            steps{
+                script{
+                    gv = load "script.groovy"
+                }
+            }
+        }
+        stage('build') {
             steps {
                 script {
-                    echo "Building the application..."
-                    sh 'mvn package'
+                   gv.buildJar()
                 }
             }
         }
         stage('build docker image') {
             steps {
                 script {
-                    echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub ', passwordVariable: 'PASS', usernameVariable: 'USER')]){
-                    sh 'sudo systemctl start docker'
-                    sh 'sudo docker build -t devopstrainer/myrepoprivate:jenkinsjob .'
-                    sh 'echo $PASS | sudo docker login -u $USER --password-stdin'
-                    sh 'sudo docker push devopstrainer/myrepoprivate:jenkinsjob'
-                    }
+                   gv.buildImage()
+
                 }
             }
         }
         stage('deploy') {
             steps {
                 script {
-                    echo "Deploying the application..."
+                   gv.deployApp()
                 }
             }
         }
