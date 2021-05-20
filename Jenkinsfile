@@ -7,7 +7,7 @@ pipeline {
         maven 'mymaven'
     }
     stages {
-        stage('build') {
+        stage('build war file') {
             steps {
                 script {
                     echo "Building the application..."
