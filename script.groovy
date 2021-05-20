@@ -8,7 +8,7 @@ def buildImage() {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub ', passwordVariable: 'PASS', usernameVariable: 'USER')]){
                     sh 'sudo docker build -t devopstrainer/myrepoprivate:jenkinsjob .'
                     sh 'echo $PASS | sudo docker login -u $USER --password-stdin'
-                    sh 'sudo docker push devopstrainer/myrepoprivate:jenkinsjob'
+                    sh 'sudo docker push devopstrainer/myrepoprivate:$BUILD_NUMBER'
 } 
 }
 def deployApp() {
