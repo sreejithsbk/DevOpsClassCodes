@@ -20,6 +20,7 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'docker-hub ', passwordVariable: 'PASS', usernameVariable: 'USER')])
+                    sh 'sudo systemctl start docker'
                     sh 'sudo docker build -t devopstrainer/myrepoprivate:jenkinsjob .'
                     sh 'echo $PASS | sudo docker login -u $USER --password-stdin'
                     sh 'sudo docker push devopstrainer/myrepoprivate:jenkinsjob'
