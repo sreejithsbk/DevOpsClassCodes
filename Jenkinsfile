@@ -54,6 +54,7 @@ pipeline {
                     cobertura coberturaReportFile: 'target/site/cobertura/coverage.xml'
             }
         }
+        }
         stage('Package') {
             agent any
             steps {
