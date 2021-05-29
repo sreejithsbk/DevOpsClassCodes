@@ -49,13 +49,17 @@ pipeline {
                 sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
 
             }
+            post{
+                always{
+                    cobertura coberturaReportFile: 'target/site/cobertura/coverage.xml'
+            }
         }
         stage('Package') {
             agent any
             steps {
                 // Get some code from a GitHub repository
                 sh 'mvn package'
-
+                
             }
         }
 
